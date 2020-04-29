@@ -1,0 +1,12 @@
+# git ignore file
+
+# don't care files
+.ipynb_checkpoints/*
+best_model.h5
+KoBERT-master/*
+textrank-master/*
+log/*
+mecab/*
+
+# data files
+data/*
