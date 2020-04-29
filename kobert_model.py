@@ -122,7 +122,7 @@ def kobert(MODEL_NAME, train_data, test_data, MAX_LEN = 32):
                 summa_sent = ''
                 for word in summa_words:
                     summa_sent += word[0].split('/')[0] + ' '
-                train_data.loc[i, 'document'] = summa_sent
+                train_data.loc[i, 'document'] = sent + summa_sent
 
         for i, data in test_data.iterrows():
             sent = data['document']
@@ -139,7 +139,7 @@ def kobert(MODEL_NAME, train_data, test_data, MAX_LEN = 32):
                 summa_sent = ''
                 for word in summa_words:
                     summa_sent += word[0].split('/')[0] + ' '
-                test_data.loc[i, 'document'] = summa_sent
+                test_data.loc[i, 'document'] = sent + summa_sent
         
 
     if torch.cuda.is_available():
