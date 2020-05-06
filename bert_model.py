@@ -43,8 +43,8 @@ def tokenize(tokenizer, sentences, MAX_LEN):
         encoded_sent = tokenizer.encode(
                 sent,
                 add_special_tokens=True,
-                max_length = MAX_LEN, # 32 / 64 / 128 / none
-                pad_to_max_length = True
+                max_length = MAX_LEN # 32 / 64 / 128 / none
+                #  pad_to_max_length = True
                 )
         encoded_sent = [word for word in encoded_sent if not word in stopwords] # delete stopwords
         input_ids.append(encoded_sent)
@@ -252,7 +252,7 @@ def fine_tune_and_test(train_data, val_data, test_data, num_labels, num_epochs, 
     test_dataloader = DataLoader(test_data, sampler=test_sampler, batch_size=batch_size)
     
     #  print("Predicting labels for {:,} test sentences...".format(len()))
-    model.eval()
+    embedding_model.eval()
 
     predictions, true_labels = [], []
 
@@ -261,7 +261,7 @@ def fine_tune_and_test(train_data, val_data, test_data, num_labels, num_epochs, 
         b_input_ids, b_input_mask, b_labels = batch
 
         with torch.no_grad():
-            outputs = model(b_input_ids, token_type_ids=None, attention_mask=b_input_mask)
+            outputs = embedding_model(b_input_ids, token_type_ids=None, attention_mask=b_input_mask)
 
         logits = outputs[0]
         logits = logits.detach().cpu().numpy()
@@ -272,11 +272,15 @@ def fine_tune_and_test(train_data, val_data, test_data, num_labels, num_epochs, 
     
     accuracy_set = []
 
+    #  pdb.set_trace()
+
     for i in range(len(true_labels)):
 
-        pred_labels_i = np.argmax(predictions[i], axis=1).flatten()
-        acc = flat_accuracy(predictions, true_labels)
+        #  pred_labels_i = np.argmax(predictions[i], axis=1).flatten()
+        acc = flat_accuracy(predictions[i], true_labels[i])
         accuracy_set.append(acc)
+
+    #  pdb.set_trace()
 
     flat_predictions = np.concatenate(predictions, axis=0)
     flat_true_lables = np.concatenate(true_labels, axis=0)
@@ -309,22 +313,22 @@ def bert(MODEL_NAME, train_data, test_data, MAX_LEN = 32):
                     summa_sent += word[0].split('/')[0] + ' '
                 train_data.loc[i, 'document'] = sent + summa_sent
 
-        for i, data in test_data.iterrows():
-            sent = data['document']
-            if (i + 1) % 1000 == 0:
-                print("test summarizing " + str(i + 1))
-            if len(sent) > MAX_LEN:
-                words = sent.split(' ')
-                if len(words) < 2:
-                    continue
-                try:
-                    summa_words = summarizer.summarize(words, topk=30)
-                except:
-                    continue
-                summa_sent = ''
-                for word in summa_words:
-                    summa_sent += word[0].split('/')[0] + ' '
-                test_data.loc[i, 'document'] = sent + summa_sent
+        #  for i, data in test_data.iterrows():
+        #      sent = data['document']
+        #      if (i + 1) % 1000 == 0:
+        #          print("test summarizing " + str(i + 1))
+        #      if len(sent) > MAX_LEN:
+        #          words = sent.split(' ')
+        #          if len(words) < 2:
+        #              continue
+        #          try:
+        #              summa_words = summarizer.summarize(words, topk=30)
+        #          except:
+        #              continue
+        #          summa_sent = ''
+        #          for word in summa_words:
+        #              summa_sent += word[0].split('/')[0] + ' '
+        #          test_data.loc[i, 'document'] = sent + summa_sent
         
 
     num_labels = 2
@@ -340,10 +344,10 @@ def bert(MODEL_NAME, train_data, test_data, MAX_LEN = 32):
     #  total_freq = 0
     #  rare_freq = 0
     #
-    #  X_train = np.array(train_data['document'])
-    #  X_test = np.array(test_data['document'])
-    #  y_train = np.array(train_data['label'])
-    #  y_test = np.array(test_data['label'])
+    X_train = np.array(train_data['document'])
+    X_test = np.array(test_data['document'])
+    y_train = np.array(train_data['label'])
+    y_test = np.array(test_data['label'])
     #
     #  for key, value in count_tokenizer.word_counts.items():
     #      total_freq = total_freq + value

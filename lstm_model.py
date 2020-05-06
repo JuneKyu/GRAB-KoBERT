@@ -64,22 +64,23 @@ def lstm(MODEL_NAME, train_data, test_data, MAX_LEN = 32):
                     summa_sent += word[0].split('/')[0] + ' '
                 train_data.loc[i, 'document'] = sent + summa_sent
 
-        for i, data in test_data.iterrows():
-            sent = data['document']
-            if (i + 1) % 1000 == 0:
-                print("test summarizing " + str(i + 1))
-            if len(sent) > MAX_LEN:
-                words = sent.split(' ')
-                if len(words) < 2:
-                    continue
-                try:
-                    summa_words = summarizer.summarize(words, topk=30)
-                except:
-                    continue
-                summa_sent = ''
-                for word in summa_words:
-                    summa_sent += word[0].split('/')[0] + ' '
-                test_data.loc[i, 'document'] = sent + summa_sent
+        # #only 
+        #  for i, data in test_data.iterrows():
+        #      sent = data['document']
+        #      if (i + 1) % 1000 == 0:
+        #          print("test summarizing " + str(i + 1))
+        #      if len(sent) > MAX_LEN:
+        #          words = sent.split(' ')
+        #          if len(words) < 2:
+        #              continue
+        #          try:
+        #              summa_words = summarizer.summarize(words, topk=30)
+        #          except:
+        #              continue
+        #          summa_sent = ''
+        #          for word in summa_words:
+        #              summa_sent += word[0].split('/')[0] + ' '
+        #          test_data.loc[i, 'document'] = sent + summa_sent
              
     print("tokenizing...")
     log.info("tokenizing...")
@@ -149,6 +150,9 @@ def lstm(MODEL_NAME, train_data, test_data, MAX_LEN = 32):
     model.compile(optimizer='rmsprop', loss='binary_crossentropy', metrics=['acc'])
     history = model.fit(X_train, y_train, epochs=15, callbacks=[es, mc], batch_size=60, validation_split=0.1)
     loaded_model = load_model('best_model.h5')
-    print("acc : %.4f" %(loaded_model.evaluation(X_test, y_test)[1]))
-    log.info("acc : %.4f" %(loaded_model.evaluation(X_test, y_test)[1]))
+    
+    print("acc : %.4f" %(loaded_model.evaluate(X_test, y_test)[1]))
+    log.info("acc : %.4f" %(loaded_model.evaluate(X_test, y_test)[1]))
+
+
 
