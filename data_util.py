@@ -3,13 +3,25 @@ import pandas as pd
 import numpy as np
 import os
 
+
 def load_data():
-    
+
+    #  http://ling.snu.ac.kr/kosac/data/KOSAC_sample.zip
+    #  https://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz  # imdb
+    #  https://github.com/songys/Toxic_comment_data.git  # detailed labing for nsmc 9999 / 9999 train,test
+
+    if (not os.path.exists("data")):
+        os.mkdir("data")
+
     # download data
-    if(not os.path.exists("data/ratings_train.txt")):
+    if (not os.path.exists("data/ratings_train.txt")):
         print("downloading nsmc dataset")
-        urllib.request.urlretrieve("https://raw.githubusercontent.com/e9t/nsmc/master/ratings_train.txt", filename="data/ratings_train.txt")
-        urllib.request.urlretrieve("https://raw.githubusercontent.com/e9t/nsmc/master/ratings_test.txt", filename="data/ratings_test.txt") 
+        urllib.request.urlretrieve(
+            "https://raw.githubusercontent.com/e9t/nsmc/master/ratings_train.txt",
+            filename="data/ratings_train.txt")
+        urllib.request.urlretrieve(
+            "https://raw.githubusercontent.com/e9t/nsmc/master/ratings_test.txt",
+            filename="data/ratings_test.txt")
 
     # read data
     print("reading data")
@@ -18,12 +30,16 @@ def load_data():
 
     # delete duplicates and nulls
     train_data.drop_duplicates(subset=['document'], inplace=True)
-    train_data['document'] = train_data['document'].str.replace("[^ㄱ-ㅎㅏ-ㅣ가-힣 ]","")
-    train_data['document'].replace('', np.nan, inplace=True) # replace space to null
+    train_data['document'] = train_data['document'].str.replace(
+        "[^ㄱ-ㅎㅏ-ㅣ가-힣 ]", "")
+    train_data['document'].replace('', np.nan,
+                                   inplace=True)  # replace space to null
     train_data = train_data.dropna(how='any')
     test_data.drop_duplicates(subset=['document'], inplace=True)
-    test_data['document'] = test_data['document'].str.replace("[^ㄱ-ㅎㅏ-ㅣ가-힣 ]","")
-    test_data['document'].replace('', np.nan, inplace=True) # replace space to null
+    test_data['document'] = test_data['document'].str.replace(
+        "[^ㄱ-ㅎㅏ-ㅣ가-힣 ]", "")
+    test_data['document'].replace('', np.nan,
+                                  inplace=True)  # replace space to null
     test_data = test_data.dropna(how='any')
 
     return train_data, test_data
