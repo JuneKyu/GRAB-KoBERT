@@ -1,14 +1,18 @@
+from tensorflow.keras.datasets import imdb
 import urllib.request
 import pandas as pd
 import numpy as np
 import os
 
 
-def load_data():
+def load_data(data_name):
+    if (data_name == "nsmc"):
+        return load_nsmc()
+    elif (data_name == "imdb"):
+        return load_imdb()
 
-    #  http://ling.snu.ac.kr/kosac/data/KOSAC_sample.zip
-    #  https://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz  # imdb
-    #  https://github.com/songys/Toxic_comment_data.git  # detailed labing for nsmc 9999 / 9999 train,test
+
+def load_nsmc():
 
     if (not os.path.exists("data")):
         os.mkdir("data")
@@ -43,3 +47,7 @@ def load_data():
     test_data = test_data.dropna(how='any')
 
     return train_data, test_data
+
+
+def load_imdb():
+    (X_train, y_train), (X_test, y_test) = imdb.load_data()

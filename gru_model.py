@@ -12,7 +12,10 @@ from konlpy.tag import Komoran
 from textrank import KeywordSummarizer
 komoran = Komoran()
 
+from model_util import kor_summa
+
 from config import logger as log
+import config
 
 import pdb
 
@@ -49,51 +52,23 @@ def komoran_tokenizer(sent):
 
 
 def gru(MODEL_NAME, train_data, test_data, MAX_LEN=32):
-
     if MODEL_NAME == 'summagru':
         print("summarizing data that are longer than MAX_LEN " + str(MAX_LEN))
         log.info("summarizing data that are longer than MAX_LEN " +
-                 str(MAX_LEN))
+                 str(MAX_LEN)) 
+        if config.data_name == 'nsmc':
+            summarizer = KeywordSummarizer(tokenize=komoran_tokenizer,
+                                           min_count=1,
+                                           min_cooccurrence=1)
+            print("summarizing train data")
+            train_data = kor_summa(summarizer, train_data, MAX_LEN)
+            print("summarizing test data")
+            test_data = kor_summa(summarizer, test_data, MAX_LEN)
 
-        summarizer = KeywordSummarizer(tokenize=komoran_tokenizer,
-                                       min_count=1,
-                                       min_cooccurrence=1)
-        for i, data in train_data.iterrows():
-            sent = data['document']
-            if (i + 1) % 1000 == 0:
-                print("train summarizing " + str(i + 1))
-            #  if len(sent) > MAX_LEN:
-            if len(sent) < MAX_LEN:
-                words = sent.split(' ')
-                if len(words) < 2:
-                    continue
-                try:
-                    summa_words = summarizer.summarize(words, topk=30)
-                except:
-                    continue
-                summa_sent = ''
-                for word in summa_words:
-                    summa_sent += word[0].split('/')[0] + ' '
-                train_data.loc[i, 'document'] = sent + '' + summa_sent
+        elif config.data_name == 'imdb':
+            print("not implemented yet...")
 
-        # #only
-        #  for i, data in test_data.iterrows():
-        #      sent = data['document']
-        #      if (i + 1) % 1000 == 0:
-        #          print("test summarizing " + str(i + 1))
-        #      if len(sent) > MAX_LEN:
-        #          words = sent.split(' ')
-        #          if len(words) < 2:
-        #              continue
-        #          try:
-        #              summa_words = summarizer.summarize(words, topk=30)
-        #          except:
-        #              continue
-        #          summa_sent = ''
-        #          for word in summa_words:
-        #              summa_sent += word[0].split('/')[0] + ' '
-        #          test_data.loc[i, 'document'] = sent + summa_sent
-
+           
     print("tokenizing...")
     log.info("tokenizing...")
     okt = Okt()

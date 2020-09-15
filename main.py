@@ -30,10 +30,12 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--model_name', type=str, default='lstm')
     parser.add_argument('--max_len', type=int, default='32')
+    parser.add_argument('--data_name', type=str, default='nsmc')
     args = parser.parse_args()
 
     MODEL_NAME = args.model_name
     MAX_LEN = args.max_len
+    DATA_NAME = args.data_name
 
     # logging
     log = config.logger
@@ -54,13 +56,16 @@ def main():
 
     log.info("model_name : " + str(MODEL_NAME))
     log.info("max_len : " + str(MAX_LEN))
+    log.info("data_name : " + str(DATA_NAME))
     print("model_name : " + str(MODEL_NAME))
     print("max_len : " + str(MAX_LEN))
+    print("data_name : " + str(DATA_NAME))
+    config.data_name = DATA_NAME
 
     # load data
     print("loading data ...")
     log.info("loading data ...")
-    train_data, test_data = data_util.load_data()
+    train_data, test_data = data_util.load_data(DATA_NAME)
     print("")
     log.info("")
 
