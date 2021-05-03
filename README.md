@@ -1,8 +1,14 @@
 # GRAB vector, GRAB-(Ko)BERT
 
-This is a implementation for (kor)\<그래프 순위 결정 메커니즘을 이용한 BERT 기반 감정분석 모델의 개선\> (eng)[\<Improving BERT-based Sentiment Analysis Model using Graph-based Ranking Mechanism\>](https://www.dbpia.co.kr/pdf/pdfView.do?nodeId=NODE10528632&mark=0&useDate=&bookmarkCnt=1&ipRange=N&accessgl=Y&language=ko_KR)
+This is a implementation of the paper
+(kor)\<그래프 순위 결정 메커니즘을 이용한 BERT 기반 감정분석 모델의 개선\>
+(eng)[\<Improving BERT-based Sentiment Analysis Model using Graph-based Ranking Mechanism\>](https://www.dbpia.co.kr/pdf/pdfView.do?nodeId=NODE10528632&mark=0&useDate=&bookmarkCnt=1&ipRange=N&accessgl=Y&language=ko_KR)
+(KIISE TCP 2021)
 
-This paper is a future work from (kor)\<감정 분석을 위한 그래프 순위화 기바 강인한 한국어 BERT 모델\> (eng)[\<Robust Korean BERT Model for Sentiment Analysis using Graph-based Ranking Mechansim\>](https://www.dbpia.co.kr/pdf/pdfView.do?nodeId=NODE09874584&mark=0&useDate=&bookmarkCnt=1&ipRange=N&accessgl=Y&language=ko) (best paper awarded from KCC2020)
+This paper is a future work from
+(kor)\<감정 분석을 위한 그래프 순위화 기바 강인한 한국어 BERT 모델\>
+(eng)[\<Robust Korean BERT Model for Sentiment Analysis using Graph-based Ranking Mechansim\>](https://www.dbpia.co.kr/pdf/pdfView.do?nodeId=NODE09874584&mark=0&useDate=&bookmarkCnt=1&ipRange=N&accessgl=Y&language=ko)
+(best paper awarded from KCC2020)
 
 
 ## Abstract
@@ -43,23 +49,65 @@ To run the experiments, run the scripts:
 sh run.sh
 ```
 
+## Graph-based Ranking Mechanism and Appling to Parallel or Recurrent models
+
+Graph-based Ranking mechanism is invented by [Rada Mihalcea et al](https://www.aclweb.org/anthology/W04-3252/) which is inspired by [Brin & Page](ilpubs.stanford.edu:8090/422/1/1999-66.pdf).
+We applied the additional extracted features to different types of neural network-based models.
+
+<p align="center">
+<img src="./imgs/Fig1.png" width="1000">
+</p>
+
 experiments:
 examples of outputs of graph-based ranking mechanism.
 
+## Experimental Results
+
+### Extracted formats of sentences by graph-based ranking mechanism
+
+<p align="center">
+<img src="./imgs/Table1.png" width="1000">
+</p>
+
+### Performance
+
+Accuracy for each model trained with a dequence length of 128 for the English dataset of IMDB and the Korean dataset of NSMC.
 
 
-validation accuracy plot of lstm based models
+#### IMDB (English dataset)
 
-![lstm_val_acc](imgs/lstm_val_acc.jpg)
+| Model name             | Accuracy    | 
+| ---------------------- | ----------- |
+| LSTM                   | 0.8768      |
+| GRAB-LTSM(__summary__) | __0.8984__  |
+| GRAB-LSTM(keyword)     | 0.8344      |
+| GRU                    | 0.8852      |
+| GRAB-GRU(__summary__)  | __0.8956__  |
+| GRAB-GRU(keyword)      | 0.8152      |
+| BERT                   | 0.9012      |
+| GRAB-BERT(summary)     | 0.9088      |
+| GRAB-BERT(__keyword__) | __0.9177__  |
 
-validation accuracy plot of bert based models
 
-![bert_val_acc](imgs/bert_val_acc.jpg)
+#### NSMC (Korean dataset)
 
-validation accuracy plot of kobert based models
+| Model name                | Accuracy    | 
+| ------------------------- | ----------- |
+| LSTM                      | 0.8661      |
+| GRAB-LTSM(morpheme)       | 0.8631      |
+| GRU                       | 0.8626      |
+| GRAB-GRU(morpheme)        | 0.8570      |
+| KoBERT                    | 0.8963      |
+| GRAB-KoBERT(__morpheme__) | __0.9095__  |
 
-![kobert_val_acc](imgs/kobert_val_acc.jpg)
+<p align="center">
+<img src="./imgs/Fig2.png" width="1000">
+</p>
 
-training loss plot of kobert based models
+<p align="center">
+<img src="./imgs/Fig3.png" width="1000">
+</p>
 
-![kobert_training_loss](imgs/kobert_loss.jpg)
+<p align="center">
+<img src="./imgs/Fig4,5.png" width="1000">
+</p>
