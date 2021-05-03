@@ -1,13 +1,19 @@
 # GRAB vector, GRAB-(Ko)BERT
 
 This is a implementation of the paper
+
 (kor)\<그래프 순위 결정 메커니즘을 이용한 BERT 기반 감정분석 모델의 개선\>
+
 (eng)[\<Improving BERT-based Sentiment Analysis Model using Graph-based Ranking Mechanism\>](https://www.dbpia.co.kr/pdf/pdfView.do?nodeId=NODE10528632&mark=0&useDate=&bookmarkCnt=1&ipRange=N&accessgl=Y&language=ko_KR)
+
 (KIISE TCP 2021)
 
 This paper is a future work from
+
 (kor)\<감정 분석을 위한 그래프 순위화 기바 강인한 한국어 BERT 모델\>
+
 (eng)[\<Robust Korean BERT Model for Sentiment Analysis using Graph-based Ranking Mechansim\>](https://www.dbpia.co.kr/pdf/pdfView.do?nodeId=NODE09874584&mark=0&useDate=&bookmarkCnt=1&ipRange=N&accessgl=Y&language=ko)
+
 (best paper awarded from KCC2020)
 
 
