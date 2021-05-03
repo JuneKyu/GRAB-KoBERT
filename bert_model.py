@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import pdb
+import config
+from config import logger as log
+from model_util import kor_summa
 import numpy as np
 import pandas as pd
 import time
@@ -19,13 +23,6 @@ from tensorflow.keras.preprocessing.text import Tokenizer
 from konlpy.tag import Komoran
 from textrank import KeywordSummarizer
 komoran = Komoran
-
-from model_util import kor_summa
-
-from config import logger as log
-import config
-
-import pdb
 
 # Korean stopwords
 stopwords = [
@@ -138,8 +135,8 @@ def fine_tune_and_test(train_data, val_data, test_data, num_labels, num_epochs,
     total_steps = len(train_dataloader) * num_epochs
 
     scheduler = get_linear_schedule_with_warmup(optimizer,
-                                     warmup_steps=0,
-                                     t_total=total_steps)
+                                                warmup_steps=0,
+                                                t_total=total_steps)
 
     seed_val = 42
     random.seed(seed_val)
@@ -338,11 +335,10 @@ def bert(MODEL_NAME, train_data, test_data, MAX_LEN=32):
             train_data = kor_summa(summarizer, train_data, MAX_LEN)
             print("summarizing test data")
             test_data = kor_summa(summarizer, test_data, MAX_LEN)
-    
+
         elif config.data_name == 'imdb':
             print("not implemented yet...")
 
-            
     num_labels = 2
     num_epochs = 5
     batch_size = 32

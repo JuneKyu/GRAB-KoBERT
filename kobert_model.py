@@ -132,10 +132,9 @@ def kobert(MODEL_NAME, train_data, test_data, MAX_LEN=32):
             train_data = kor_summa(summarizer, train_data, MAX_LEN)
             print("summarizing test data")
             test_data = kor_summa(summarizer, test_data, MAX_LEN)
-    
+
         elif config.data_name == 'imdb':
             print("not implemented yet...")
-
 
     if torch.cuda.is_available():
         device = torch.device('cuda')
@@ -221,8 +220,8 @@ def kobert(MODEL_NAME, train_data, test_data, MAX_LEN=32):
     warmup_step = int(t_total * warmup_ratio)
 
     scheduler = get_linear_schedule_with_warmup(optimizer,
-                                     warmup_steps=warmup_step,
-                                     t_total=t_total)
+                                                warmup_steps=warmup_step,
+                                                t_total=t_total)
 
     for e in range(num_epochs):
         train_acc = 0.0

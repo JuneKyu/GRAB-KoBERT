@@ -1,0 +1,6 @@
+pip install pandas
+pip install tensorflow-gpu
+conda install pytorch torchvision torchaudio cudatoolkit=10.2 -c pytorch
+pip install transformers
+pip3 install konlpy
+pip install sklearn
